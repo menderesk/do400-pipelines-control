@@ -1,9 +1,13 @@
 pipeline {
     agent {
-	node {
-	   label 'nodejs'
+		node {
+	   		label 'nodejs'
+		}
+    }
+	parameters {
+		booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
 	}
-     }
+}
      stages {
 	 stage('Run Tests') {
            parallel {
@@ -13,7 +17,8 @@ pipeline {
  	            }
      		}	 
 	        stage('Frontend Tests') {
-	           steps {
+	           when { expression {params.RUN_FRONTEND_TESTS }}
+			   steps {
 		    sh 'node ./frontend/test.js'
 		   }
                 }
